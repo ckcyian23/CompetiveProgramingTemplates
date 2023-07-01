@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+template <typename T, class Merge = function<T(const T&, const T&)>>
+struct SparseTable {
+    const int n;
+    vector<vector<T>> st;
+    Merge merge;
+    SparseTable(const vector<T> &a, const Merge &merge) : merge(merge), n(a.size()) {
+        int lg = __lg(n) + 1;
+        st.resize(lg);
+        st[0] = a;
+        for(int j = 1; j < lg; j++) {
+            st[j].resize(n - (1 << j) + 1);
+            for(int i = 0; i <= n - (1 << j); i++) {
+                st[j][i] = merge(st[j - 1][i], st[j - 1][i + (1 << j - 1)]);
+            }
+        }
+    }
+    T get(int l, int r) const {
+        int lg = __lg(r - l);
+        return merge(st[lg][l], st[lg][r - (1 << lg)]);
+    }
+};
+
+
+int main() {
+    int n;
+    cin >> n;
+
+    vector<int> a(0);
+    
+    SparseTable<int> st(a, [](int x, int y) {
+        return gcd(x, y);
+    });
+
+    
+    return 0;
+}
