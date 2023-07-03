@@ -9,21 +9,15 @@ struct Matrix {
     vector<vector<T>> a;
 
     Matrix(int n = 0, int m = 0) : n(n), m(m), a(n, vector<T>(m)) {}
-    Matrix(const initializer_list<T> &dat) : n(1), m(dat.size()), a(n, dat){
-    }
+    Matrix(const initializer_list<T> &dat) : n(1), m(dat.size()), a(n, dat) {}
+    Matrix(const initializer_list<T> &&dat) : n(1), m(dat.size()) {a.emplace_back(dat);}
     Matrix(const initializer_list<initializer_list<T>> &dat) {
         n = dat.size();
-        a.resize(n);
         m = 0;
-        for (auto it = dat.begin(); it != dat.end(); it++) {
-            m = max<int>(m, it->size());
-        }
-        auto cur = a.begin();
-        for (auto it = dat.begin(); it != dat.end(); it++, cur++) {
-            *cur = *it;
-            cur->resize(m);
-        }
+        for (auto &h : dat) a.emplace_back(h), m = max(m, h.size());
+        for (auto &h : a) a.resize(m);
     }
+    
     vector<T>& operator[] (int k) {
         assert(k < n);
         return a[k];
@@ -33,11 +27,12 @@ struct Matrix {
         return a[k];
     }
 
-    static Matrix eye(int n, int m) {
+    static Matrix eye(int n, int m = -1) {
+        if (m == -1) m = n;
         auto res = Matrix(n, m);
         int x = min(n, m);
         for (int i = 0; i < x; i++) {
-            res.a[i][i] = 1;
+            res[i][i] = 1;
         }
         return res;
     }
@@ -97,7 +92,7 @@ struct Matrix {
 
     Matrix pow(i64 k) const {
         assert(this->n == this->m);
-        auto res = Matrix<T>::eye(this->n, this->m);
+        auto res = Matrix::eye(this->n, this->m);
 
         auto t = *this;
         for (i64 i = k; i; i /= 2) {
@@ -109,24 +104,14 @@ struct Matrix {
 
         return res;
     }
-};
 
-
-int main() {
-
-    Matrix m{2};
-    cout << m.n << ' ' << m.m << '\n';
-    m = m.pow(2);
-    auto x = m.a;
-    for (auto i : x) {
-        for (auto j : i) {
-            cout << j << ' ';
+    void show() const {
+        cout << "Matrix(showing):\n";
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                cout << this->a[i][j] << " \n"[j == m - 1];
+            }
         }
         cout << '\n';
     }
-
-
-
-
-    return 0;
-}
+};
