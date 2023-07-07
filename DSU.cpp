@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 //普通（维护了一个sz可以省略）并查集
 struct DSU {
     int n;
@@ -61,6 +59,7 @@ struct DSU {
         return true;
     }
 };
+
 
 //可撤销并查集
 struct RevocableDSU {

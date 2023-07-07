@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-using i64 = long long;
 template<class T = i64, int N = 64>
 struct LinearBasis{
     vector<T> a;
@@ -81,14 +78,3 @@ struct LinearBasis{
         return *this = *this + rhs;;
     }
 };
-
-
-
-
-int main() {
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
-    LinearBasis ls;
-    
-    return 0;
-}

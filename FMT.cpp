@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 template<class T>
 void fmt(vector<T> &a) {
     int n = a.size();

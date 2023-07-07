@@ -1,12 +1,9 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 template <typename T, class Merge = function<T(const T&, const T&)>>
 struct SparseTable {
     const int n;
     vector<vector<T>> st;
     Merge merge;
-    SparseTable(const vector<T> &a, const Merge &merge) : merge(merge), n(a.size()) {
+    SparseTable(const vector<T> &a, const Merge &merge) : n(a.size()), merge(merge) {
         int lg = __lg(n) + 1;
         st.resize(lg);
         st[0] = a;
@@ -22,18 +19,3 @@ struct SparseTable {
         return merge(st[lg][l], st[lg][r - (1 << lg)]);
     }
 };
-
-
-int main() {
-    int n;
-    cin >> n;
-
-    vector<int> a(0);
-    
-    SparseTable<int> st(a, [](int x, int y) {
-        return gcd(x, y);
-    });
-
-    
-    return 0;
-}
