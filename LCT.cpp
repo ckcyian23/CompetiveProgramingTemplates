@@ -114,7 +114,7 @@ struct LCT {
         makeRoot(x);
         if (findRoot(y) == x && tr[y].p == x && tr[y].ch[0] == N) {
             tr[x].ch[1] = tr[y].p = N;
-            push(x);
+            pull(x);
         }
         // access(y);
         // tr[y].ch[0] = tr[x].p = N;
