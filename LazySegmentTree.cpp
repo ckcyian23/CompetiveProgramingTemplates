@@ -136,34 +136,27 @@ struct LazySegmentTree {
     }
 };
  
-using u32 = unsigned;
  
 struct Tag {
-    u32 add = 0;
-    u32 ads = 0;
-    u32 adl = 0;
+    int add;
+    Tag(int add = 0) : add(add) {}
     void apply(Tag t) {
-        ads += t.ads;
-        adl += t.ads * add;
-        adl += t.adl;
         add += t.add;
     }
 };
  
 struct Info {
-    u32 len = 0;
-    u32 sum = 0;
-    u32 hsm = 0;
+    i64 sum;
+    int len;
+    Info(i64 sum = 0, int len = 1) : sum(sum), len(len) {}
     void apply(Tag t) {
-        hsm += t.ads * sum + t.adl * len;
         sum += t.add * len;
     }
 };
- 
+
 Info operator+(Info a, Info b) {
     Info c;
     c.len = a.len + b.len;
     c.sum = a.sum + b.sum;
-    c.hsm = a.hsm + b.hsm;
     return c;
 }
