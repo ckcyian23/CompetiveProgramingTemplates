@@ -89,6 +89,7 @@ void solve() {
         vector<int> stk(2 * k);
         cur = 0;
         for (auto x : p) {
+            if (x == 0) continue;
             int r = lca(x, stk[cur]);
             while (stk[cur] != r) {
                 int y = stk[cur--];
