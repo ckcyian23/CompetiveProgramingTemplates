@@ -1,6 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-
 template<class Info, class Tag>
 struct LazySegmentTree {
     int n;
