@@ -10,6 +10,7 @@ struct Zfunc {
     void init(const string &s) {
         this->s = s;
         n = s.size();
+        z.assign(n, 0);
         for (int i = 1, j = 0; i < n; i++) {
             z[i] = max(0, min(j + z[j] - i, z[i - j]));
             while (s[z[i]] == s[i + z[i]]) z[i]++;
