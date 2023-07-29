@@ -3,12 +3,22 @@ using namespace std;
 
 struct PAM  {
     static constexpr int M = 26;
-    const int n;
+    int n;
     vector<array<int, M>> t;
     vector<int> link, len, s, diff, slink;
     int cur, cnt;
 
-    PAM(int x) : n(x + 2), t(n), link(n), len(n), s(n, -1), diff(n), slink(n) {
+    PAM(){}
+    PAM(int x) {init(x);}
+
+    void init(int x) {
+        n = x + 2;
+        t.assign(n, {});
+        link.assign(n, 0);
+        len.assign(n, 0);
+        s.assign(n, -1);
+        diff.assign(n, 0);
+        slink.assign(n, 0);
         cur = 0;
         cnt = 2;
         len[1] = -1;
