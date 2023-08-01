@@ -5,7 +5,7 @@ struct PAM  {
     static constexpr int M = 26;
     int n;
     vector<array<int, M>> t;
-    vector<int> link, len, s, diff, slink;
+    vector<int> link, len, s, diff, slink, trans;
     int cur, cnt;
 
     PAM(){}
@@ -19,6 +19,7 @@ struct PAM  {
         s.assign(n, -1);
         diff.assign(n, 0);
         slink.assign(n, 0);
+        trans.assign(n, 0);
         cur = 0;
         cnt = 2;
         len[1] = -1;
@@ -33,8 +34,21 @@ struct PAM  {
             int u = cnt++;
             len[u] = len[now] + 2;
             link[u] = t[getfail(link[now])][c];
+
+            //回文分割 diff slink
             diff[u] = len[u] - len[link[u]];
             slink[u] = (diff[u] == diff[link[u]]) ? slink[link[u]] : link[u];
+
+            //双倍回文 trans
+            if (len[u] < 2) trans[u] = link[u];
+            else {
+                int x = trans[now];
+                while (s[cur - len[x] - 1] != s[cur] || len[x] + 2 > len[u] / 2) {
+                    x = link[x];
+                }
+                trans[u] = t[x][c];
+            }
+            //节点数量
             // val[u] = val[link[u]] + 1;
             t[now][c] = u;
         }
@@ -49,8 +63,9 @@ struct PAM  {
 
 };
 
+
 int main() {
-    string s = "aaa";
+    string s = "aaaa";
     int n = s.size();
 
     PAM pam(n);
