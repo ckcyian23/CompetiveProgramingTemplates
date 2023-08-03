@@ -26,17 +26,17 @@ struct Comb {
         n = m;
     }
     
-    Z fac(int m) {
+    Z fac(i64 m) {
         if (m < 0) return 0;
         if (m > n) init(2 * m);
         return _fac[m];
     }
-    Z invfac(int m) {
+    Z invfac(i64 m) {
         if (m < 0) return 0;
         if (m > n) init(2 * m);
         return _invfac[m];
     }
-    Z inv(int m) {
+    Z inv(i64 m) {
         if (m < 0) return 0;
         if (m > n) init(2 * m);
         return _inv[m];

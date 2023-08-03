@@ -1,8 +1,3 @@
-#include <bits/stdc++.h>
-
-using namespace std;
-using i64 = long long;
-
 template<class T = int>
 struct Matrix {
     int n, m;
@@ -14,8 +9,8 @@ struct Matrix {
     Matrix(const initializer_list<initializer_list<T>> &dat) {
         n = dat.size();
         m = 0;
-        for (auto &h : dat) a.emplace_back(h), m = max(m, h.size());
-        for (auto &h : a) a.resize(m);
+        for (auto &h : dat) a.emplace_back(h), m = max<int>(m, h.size());
+        for (auto &h : a) h.resize(m);
     }
     
     vector<T>& operator[] (int k) {
