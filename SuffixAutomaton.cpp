@@ -1,8 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-using i64 = long long;
- 
-
 struct SuffixAutomaton {
     static const int SIZE = 26, N = 4e5;
     struct Node {

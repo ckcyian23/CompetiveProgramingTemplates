@@ -48,12 +48,14 @@ void insert(int val) {
     split(rt, val, x, y);
     rt = merge(x, merge(newNode(val), y));
 }
+
 void del(int val) {
     int x, y, z;
     split(rt, val, x, y);
     split(y, val + 1, y, z);
     rt = merge(x, merge(merge(tr[y].lc, tr[y].rc), z));
 }
+
 int rk(int val) {
     int x, y, res;
     split(rt, val, x, y);
