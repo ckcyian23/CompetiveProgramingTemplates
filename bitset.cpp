@@ -219,10 +219,10 @@ struct Bits {
         _clean();
     }
 
-    std::ostream& operator<< (std::ostream &os) const {
-        for (int i = n - 1; i >= 0; i--) {
+    friend std::ostream& operator<< (std::ostream &os, const Bits &x) {
+        for (int i = x.n - 1; i >= 0; i--) {
             for (int j = B - 1; j >= 0; j--) {
-                os << (bits[i] >> j & 1);
+                os << (x.bits[i] >> j & 1);
             }
         }
         return os;
