@@ -228,19 +228,19 @@ struct Bits {
         return os;
     }
 
-    bool any() {
+    bool any() const {
         for (int i = 0; i < n; i++) {
             if (bits[i]) return true;
         }
         return false;
     }
-    bool none() {
+    bool none() const {
         for (int i = 0; i < n; i++) {
             if (bits[i]) return false;
         }
         return true;
     }
-    bool all() {
+    bool all() const {
         for (int i = 0; i + 1 < n; i++) {
             if (bits[i] != -1ULL) return false;
         }
