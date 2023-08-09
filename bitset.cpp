@@ -274,4 +274,7 @@ struct Bits {
     bool get(int k) const {
         return bits[k / B] >> (k % B) & 1;
     }
+    bool operator== (const Bits &rhs) const {
+        return (b == rhs.b && bits == rhs.bits);
+    }
 };
