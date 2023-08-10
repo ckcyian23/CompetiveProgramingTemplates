@@ -1,4 +1,4 @@
-struct SuffixAutomaton {
+struct SAM {
     static const int SIZE = 26, N = 4e5;
     struct Node {
         int len = 0;
@@ -7,7 +7,7 @@ struct SuffixAutomaton {
         Node() = default;
     } t[2 * N];
     int cnt;
-    SuffixAutomaton() {
+    SAM() {
         cnt = 1;
         fill(t[0].next, t[0].next + SIZE, 1);
         t[0].len = -1;
@@ -59,7 +59,7 @@ struct SuffixAutomaton {
 
 
 //map
-struct SuffixAutomaton {
+struct SAM {
     static constexpr int N = 5E5;
     struct Node {
         int len = 0;
@@ -68,7 +68,7 @@ struct SuffixAutomaton {
         Node() = default;
     } t[2 * N];
     int cnt = 1;
-    SuffixAutomaton() = default;
+    SAM() = default;
 
     int extend(int p, int c) {
         int cur = ++cnt;

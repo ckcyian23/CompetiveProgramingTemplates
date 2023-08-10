@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct SuffixArray {
+struct SA {
     static const int N = 1E6;
     using cArray = int[N + 5];
     int n, m;
