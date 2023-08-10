@@ -13,7 +13,7 @@ struct Bits {
     }
 
     void _clean() {
-        if (n * B != b) 
+        if (n * B != b)
             bits.back() &= (1ULL << (b - B * (n - 1))) - 1;
     }
     Bits operator<< (int k) const {
@@ -108,56 +108,56 @@ struct Bits {
     // Simulates `bs |= bs << shift;`
     void or_shift(int shift) {
         int div = shift / B, mod = shift % B;
- 
+
         if (mod == 0) {
             for (int i = n - 1; i >= div; i--)
                 bits[i] |= bits[i - div];
- 
+
             return;
         }
- 
+
         for (int i = n - 1; i >= div + 1; i--)
             bits[i] |= bits[i - (div + 1)] >> (B - mod) | bits[i - div] << mod;
- 
+
         if (div < n)
             bits[div] |= bits[0] << mod;
- 
+
         _clean();
     }
     // Simulates `bs &= bs << shift;`
     void and_shift(int shift) {
         int div = shift / B, mod = shift % B;
- 
+
         if (mod == 0) {
             for (int i = n - 1; i >= div; i--)
                 bits[i] &= bits[i - div];
             return;
         }
- 
+
         for (int i = n - 1; i >= div + 1; i--)
             bits[i] &= bits[i - (div + 1)] >> (B - mod) | bits[i - div] << mod;
- 
+
         if (div < n)
             bits[div] &= bits[0] << mod;
- 
+
         _clean();
     }
     // Simulates `bs ^= bs << shift;`
     void xor_shift(int shift) {
         int div = shift / B, mod = shift % B;
- 
+
         if (mod == 0) {
             for (int i = n - 1; i >= div; i--)
                 bits[i] ^= bits[i - div];
             return;
         }
- 
+
         for (int i = n - 1; i >= div + 1; i--)
             bits[i] ^= bits[i - (div + 1)] >> (B - mod) | bits[i - div] << mod;
- 
+
         if (div < n)
             bits[div] ^= bits[0] << mod;
- 
+
         _clean();
     }
 
@@ -247,6 +247,13 @@ struct Bits {
         if ((n * B != b)) return bits.back() == ((1ULL << (b - (n - 1) * B)) - 1);
         return bits.back() == -1ULL;
     }
+    int count() const {
+        int res = 0;
+        for (int i = 0; i < n; i++) {
+            res += __builtin_popcount(bits[i]);
+        }
+        return res;
+    }
     void flip() {
         for (int i = 0; i < n; i++) {
             bits[i] ^= -1ULL;
@@ -276,5 +283,33 @@ struct Bits {
     }
     bool operator== (const Bits &rhs) const {
         return (b == rhs.b && bits == rhs.bits);
+    }
+    bool operator< (const Bits &rhs) const {
+        for (int i = n - 1; i >= 0; i--) {
+            if (bits[i] < rhs.bits[i]) return true;
+            else if (bits[i] > rhs.bits[i]) return false;
+        }
+        return false;
+    }
+    bool operator<= (const Bits &rhs) const {
+        for (int i = n - 1; i >= 0; i--) {
+            if (bits[i] < rhs.bits[i]) return true;
+            else if (bits[i] > rhs.bits[i]) return false;
+        }
+        return true;
+    }
+    bool operator> (const Bits &rhs) const {
+        for (int i = n - 1; i >= 0; i--) {
+            if (bits[i] > rhs.bits[i]) return true;
+            else if (bits[i] < rhs.bits[i]) return false;
+        }
+        return false;
+    }
+    bool operator>= (const Bits &rhs) const {
+        for (int i = n - 1; i >= 0; i--) {
+            if (bits[i] > rhs.bits[i]) return true;
+            else if (bits[i] < rhs.bits[i]) return false;
+        }
+        return true;
     }
 };
