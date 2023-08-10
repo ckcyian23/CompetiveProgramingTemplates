@@ -3,7 +3,7 @@ struct SuffixAutomaton {
     struct Node {
         int len = 0;
         int link = 0;
-        int next[SIZE]{};
+        int next[SIZE] {};
         Node() = default;
     } t[2 * N];
     int cnt;
@@ -37,8 +37,23 @@ struct SuffixAutomaton {
         return cur;
     }
 
-    Node& operator[](int i) {
-        return t[i];
+    int extend(int p, char c, char offset = 'a') {
+        return extend(p, c - offset);
+    }
+    int next(int p, int x) {
+        return t[p].next[x];
+    }
+    int next(int p, char c, char offset = 'a') {
+        return next(p, c - 'a');
+    }
+    int link(int p) {
+        return t[p].link;
+    }
+    int len(int p) {
+        return t[p].len;
+    }
+    int size() {
+        return cnt + 1;
     }
 };
 
