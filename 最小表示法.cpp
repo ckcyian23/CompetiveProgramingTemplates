@@ -1,4 +1,5 @@
-int get(string &s) {
+template<class T>
+int get(T &s) {
     int n = s.size();
     int k = 0, i = 0, j = 1;
     while (k < n && i < n && j < n) {

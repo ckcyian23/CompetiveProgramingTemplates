@@ -1,15 +1,24 @@
 struct SAM {
-    static const int SIZE = 26, N = 4e5;
+    static const int M = 26, N = 1e6;
     struct Node {
-        int len = 0;
-        int link = 0;
-        int next[SIZE] {};
+        int len;
+        int link;
+        array<int, M> next;
         Node() = default;
     } t[2 * N];
     int cnt;
-    SAM() {
-        cnt = 1;
-        fill(t[0].next, t[0].next + SIZE, 1);
+    SAM() {init();}
+    int newNode() {
+        int u = cnt++;
+        t[u].len = t[u].link = 0;
+        t[u].next.fill(0);
+        return u;
+    }
+    void init() {
+        cnt = 0;
+        newNode();
+        newNode();
+        t[0].next.fill(1);
         t[0].len = -1;
     }
     int extend(int p, int c) {
@@ -17,7 +26,7 @@ struct SAM {
             int q = t[p].next[c];
             if (t[q].len == t[p].len + 1)
                 return q;
-            int r = ++cnt;
+            int r = newNode();
             t[r] = t[q];
             t[r].len = t[p].len + 1;
             t[q].link = r;
@@ -27,7 +36,7 @@ struct SAM {
             }
             return r;
         }
-        int cur = ++cnt;
+        int cur = newNode();
         t[cur].len = t[p].len + 1;
         while (!t[p].next[c]) {
             t[p].next[c] = cur;
@@ -53,9 +62,9 @@ struct SAM {
         return t[p].len;
     }
     int size() {
-        return cnt + 1;
+        return cnt;
     }
-};
+} sam;
 
 
 //map
