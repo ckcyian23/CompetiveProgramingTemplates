@@ -1,7 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
-using i64 = long long;
-
 constexpr int P = 998244353;
 //1004535809, 469762049
 
@@ -189,8 +185,8 @@ struct Poly {
             return Poly(n);
         }
         int v = a[i];
-        auto f = shift(-i) * power(v, P - 2);
-        return (f.log(n - i * k) * k).exp(n - i).shift(i * k) * power(v, k);
+        auto f = shift(-i) * power<P>(v, P - 2);
+        return (f.log(n - i * k) * k).exp(n - i).shift(i * k) * power<P>(v, k);
     }
 
     Poly pow(const string &s, int n) {
@@ -207,8 +203,8 @@ struct Poly {
             return Poly(n);
         }
         int v = a[i];
-        auto f = shift(-i) * power(v, P - 2);
-        return (f.log(n - i * k) * k).exp(n - i).shift(i * k) * power(v, k1);
+        auto f = shift(-i) * power<P>(v, P - 2);
+        return (f.log(n - i * k) * k).exp(n - i).shift(i * k) * power<P>(v, k1);
     }
 
     //ok

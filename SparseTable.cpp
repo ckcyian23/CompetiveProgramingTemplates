@@ -1,9 +1,13 @@
 template <typename T, class Merge = function<T(const T&, const T&)>>
-struct SparseTable {
-    const int n;
+struct ST {
+    int n;
     vector<vector<T>> st;
     Merge merge;
-    SparseTable(const vector<T> &a, const Merge &merge) : n(a.size()), merge(merge) {
+    ST() {}
+    ST(vector<T> &a, const Merge &merge) {init(a, merge);}
+    void init(vector<T> &a, const Merge &merge) {
+        n = a.size();
+        merge(merge);
         int lg = __lg(n) + 1;
         st.resize(lg);
         st[0] = a;
