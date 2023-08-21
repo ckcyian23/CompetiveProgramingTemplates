@@ -7,7 +7,7 @@ struct ST {
     ST(vector<T> &a, const Merge &merge) {init(a, merge);}
     void init(vector<T> &a, const Merge &merge) {
         n = a.size();
-        merge(merge);
+        this->merge = merge;
         int lg = __lg(n) + 1;
         st.resize(lg);
         st[0] = a;
