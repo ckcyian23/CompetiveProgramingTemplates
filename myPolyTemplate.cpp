@@ -186,7 +186,7 @@ struct Poly {
         }
         int v = a[i];
         auto f = shift(-i) * power<P>(v, P - 2);
-        return (f.log(n - i * k) * k).exp(n - i).shift(i * k) * power<P>(v, k);
+        return (f.log(n - i * k) * k).exp(n - i * k).shift(i * k) * power<P>(v, k);
     }
 
     Poly pow(const string &s, int n) {
@@ -204,7 +204,7 @@ struct Poly {
         }
         int v = a[i];
         auto f = shift(-i) * power<P>(v, P - 2);
-        return (f.log(n - i * k) * k).exp(n - i).shift(i * k) * power<P>(v, k1);
+        return (f.log(n - i * k) * k).exp(n - i * k).shift(i * k) * power<P>(v, k1);
     }
 
     //ok

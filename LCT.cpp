@@ -26,32 +26,32 @@ struct LCT {
         return (tr[tr[i].mx].w > tr[tr[j].mx].w ? tr[i].mx : tr[j].mx);
     }
 
-    void pull(int p) {
-        int lc = tr[p].ch[0], rc = tr[p].ch[1];
-        tr[p].sum = tr[lc].sum + tr[rc].sum + tr[p].val;
+    void pull(int x) {
+        int lc = tr[x].ch[0], rc = tr[x].ch[1];
+        tr[x].sum = tr[lc].sum + tr[rc].sum + tr[x].val;
         //mx指向自己
-        tr[p].mx = p;
-        tr[p].mx = maxid(lc, maxid(p, rc));
+        tr[x].mx = x;
+        tr[x].mx = maxid(lc, maxid(x, rc));
     }
 
-    void push(int p) {
-        if (tr[p].rev) {
-            reverse(tr[p].ch[0]);
-            reverse(tr[p].ch[1]);
-            tr[p].rev = 0;
+    void push(int x) {
+        if (tr[x].rev) {
+            reverse(tr[x].ch[0]);
+            reverse(tr[x].ch[1]);
+            tr[x].rev = 0;
         }
     }
     Node& operator[] (int i) {
         return tr[i];
     }
 
-    void reverse(int p) {
-        std::swap(tr[p].ch[0], tr[p].ch[1]);
-        tr[p].rev ^= 1;
+    void reverse(int x) {
+        std::swap(tr[x].ch[0], tr[x].ch[1]);
+        tr[x].rev ^= 1;
     }
 
-    bool isRoot(int p) {
-        return (tr[tr[p].p].ch[0] != p && tr[tr[p].p].ch[1] != p);
+    bool isRoot(int x) {
+        return (tr[tr[x].p].ch[0] != x && tr[tr[x].p].ch[1] != x);
     }
 
     int side(int x) {
