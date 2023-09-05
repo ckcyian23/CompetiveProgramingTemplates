@@ -86,9 +86,32 @@ struct LI {
     int eval(int x) {
         int n = X.size(), v = 0, M = 1;
         for (int i = 0; i < n; i++) {
+            if (X[i] == x) return Y[i];
             v = Norm(v + 1LL * Y[i] * Inv(1LL * (x - X[i]) * prod[i]));
             M = Norm(1LL * M * (x - X[i]));
         }
         return Norm(1LL * v * M);
     }
 };
+
+//[0, n - 1),连续值插值，不求出系数，O(n)求值
+Z eval(vector<Z> &Y, int x) {
+    int n = Y.size();
+    vector<Z> pref(n + 1), suf(n + 1);
+    pref[0] = 1;
+    for (int i = 0; i < n; i++) {
+        pref[i + 1] = pref[i] * (x - i);
+    }
+
+    suf[n] = 1;
+    for (int i = n - 1; i >= 0; i--) {
+        suf[i] = suf[i + 1] * (x - i);
+    }
+
+    Z res = 0;
+    for (int i = 0; i < n; i++) {
+        Z sg = ((n - 1 - i) % 2 ? -1 : 1);
+        res += Y[i] * (pref[i] * suf[i + 1]) * (comb.invfac(i) * comb.invfac(n - 1 - i)) * sg;
+    }
+    return res;
+}
