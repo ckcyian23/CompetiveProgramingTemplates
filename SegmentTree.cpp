@@ -1,14 +1,3 @@
-#include<bits/stdc++.h>
-using namespace std;
-
-
-//单点修改，区间查询, 左闭右开(jiangly类似同款)
-
-//注意 assert(l != r)并且  modify(x) : assert(0 <= x < n) 如果大于等于n会修改到n - 1处
-//Data的构造函数注意满足要求，特别是默认构造问题
-
-
-
 template<class Data, class Merge = std::plus<Data>>
 struct SegmentTree {
     const int n;
@@ -64,11 +53,11 @@ struct SegmentTree {
 
 };
 
-struct Max {
+struct Info {
     int x;
-    Max(int x = 0) : x(x) {}
+    Info(int x = 0) : x(x) {}
 };
 
-Max operator+(const Max& a, const Max& b) {
+Info operator+(const Info& a, const Info& b) {
     return std::max(a.x, b.x);
 }
