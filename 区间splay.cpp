@@ -108,7 +108,7 @@ namespace splay {
 
     int kth(int k) {
         int u = rt;
-        int kk = k;
+        // int kk = k;
         while (true) {
             push(u);
             if (k <= tr[tr[u].ch[0]].sz) u = tr[u].ch[0];
