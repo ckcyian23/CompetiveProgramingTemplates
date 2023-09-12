@@ -95,9 +95,12 @@ struct Poly {
             return Poly(a.begin() - k, a.end());
         }
     }
-    //ok
+
     int size() const {
         return a.size();
+    }
+    int deg() const {
+        return (int)a.size() - 1;
     }
 
     constexpr Poly& resize(int k) {
@@ -105,7 +108,7 @@ struct Poly {
         return *this;
     }
 
-    //ok
+
     Poly trunc(int k) const {
         if (k <= size()) return Poly(a.begin(), a.begin() + k);
         return Poly{a} .resize(k);
@@ -114,11 +117,11 @@ struct Poly {
     bool empty() const {
         return a.empty();
     }
-    //ok
+
     int& operator[](int idx) {
         return a[idx];
     }
-    //ok
+
     int operator[] (int idx) const {
         if (idx < size()) return a[idx];
         return 0;
@@ -143,7 +146,7 @@ struct Poly {
         }
         return res;
     }
-    //ok
+
     Poly inv(int n) const {
         Poly res{power<P>(a[0], P - 2)};
         int k = 1;
@@ -206,7 +209,7 @@ struct Poly {
         return (f.log(n - i * k) * k).exp(n - i * k).shift(i * k) * power<P>(v, k1);
     }
 
-    //ok
+
     friend Poly operator* (Poly a, Poly b) {
         if (a.empty() || b.empty()) return Poly();
         if (a.size() > b.size()) swap(a, b);
@@ -285,7 +288,7 @@ struct Poly {
         return res;
     }
 
-    //ok
+
     auto begin() const {
         return a.begin();
     }
@@ -308,7 +311,7 @@ void DAC(Poly<P> &f, Poly<P> &g, int l, int r) {
 };
 
 
-constexpr int N = 1E5;
+constexpr int N = 2E5;
 
 int fac[N + 1], invfac[N + 1];
 void init_fac() {
@@ -325,12 +328,12 @@ void init_fac() {
 using poly = Poly<P>;
 poly shift(const poly &f, int k) {
     if (k < 0) k += P;
-    int n = f.size() - 1;
-    Poly a(n + 1);
+    int n = f.deg();
+    poly a(n + 1);
     for (int i = 0; i <= n; i++) {
         a[i] = 1LL * f[n - i] * fac[n - i] % P;
     }
-    Poly b(n + 1);
+    poly b(n + 1);
     for (int i = 0; i <= n; i++) {
         b[i] = 1LL * power(k, i) * invfac[i] % P;
     }
@@ -343,4 +346,60 @@ poly shift(const poly &f, int k) {
         a[i] = 1LL * a[i] * invfac[i] % P;
     }
     return a;
+}
+poly stl2_row(int n) {
+    poly a(n + 1), b(n + 1);
+    for (int i = 0, sg = 1; i <= n; i++, sg *= -1) {
+        a[i] = (1LL * sg * invfac[i] + P) % P;
+        b[i] = 1LL * power(i, n) * invfac[i] % P;
+    }
+    return (a * b).resize(n + 1);
+}
+poly stl2_col(int n, int k) {
+    poly a(n + 1);
+    for (int i = 1; i <= n; i++) {
+        a[i] = invfac[i];
+    }
+    a = a.pow(k, n + 1);
+    for (int i = 0; i <= n; i++) {
+        a[i] = 1LL * a[i] * fac[i] % P * invfac[k] % P;
+    }
+    return a;
+}
+poly stl1_row(int n) {
+    if (n == 0) return poly{0};
+    poly res{0, 1};
+    int t = 1;
+    for (int i = __lg(n) - 1; i >= 0; i--) {
+        res *= shift(res, t);
+        t *= 2;
+        res.resize(t + 1);
+        if (n >> i & 1) {
+            res = res * poly{t, 1};
+            t++;
+        }
+        res.resize(t + 1);
+    }
+    return res;
+}
+Poly<P> stl1_col(int n, int k) {
+    Poly<P> res(n + 1);
+    for (int i = 1; i <= n; i++) {
+        res[i] = power<P>(i, P - 2);
+    }
+    res = res.pow(k, n + 1);
+    for (int i = 0; i <= n; i++) {
+        res[i] = 1LL * res[i] * fac[i] % P * invfac[k] % P;
+    }
+    return res;
+}
+
+poly Bell(int n) {
+    poly res{0, 1};
+    res = res.exp(n + 1) - Poly{1};
+    res = res.exp(n + 1);
+    for (int i = 0; i <= n; i++) {
+        res[i] = 1LL * res[i] * fac[i] % P;
+    }
+    return res;
 }
