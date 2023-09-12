@@ -71,7 +71,7 @@ void idft(vector<int> &a) {
 template<int P = 998244353>
 struct Poly {
     vector<int> a;
-    Poly(){}
+    Poly() {}
     explicit Poly(int n, int val = 0) : a(n, val) {}
     Poly(const vector<int> &a) : a(a) {}
     Poly(const vector<int> &&a) : a(a) {}
@@ -84,7 +84,6 @@ struct Poly {
             a[i] = f(i);
         }
     }
-
     Poly shift(int k) const {
         if (k >= 0) {
             auto b = a;
@@ -109,7 +108,7 @@ struct Poly {
     //ok
     Poly trunc(int k) const {
         if (k <= size()) return Poly(a.begin(), a.begin() + k);
-        return Poly{a}.resize(k);
+        return Poly{a} .resize(k);
     }
 
     bool empty() const {
@@ -235,7 +234,7 @@ struct Poly {
         a.resize(tot);
         return a;
     }
-    
+
     Poly& operator/= (int k) {
         return (*this) = (*this) / k;
     }
@@ -251,7 +250,7 @@ struct Poly {
     Poly& operator-= (const Poly &b) {
         return (*this) = (*this) - b;
     }
-    
+
     friend Poly operator/ (Poly a, int k) {
         int inv = power<P>(k, P - 2);
         for (int i = 0; i < a.size(); i++) {
@@ -307,3 +306,41 @@ void DAC(Poly<P> &f, Poly<P> &g, int l, int r) {
     }
     DAC(f, g, mid, r);
 };
+
+
+constexpr int N = 1E5;
+
+int fac[N + 1], invfac[N + 1];
+void init_fac() {
+    fac[0] = 1;
+    for (int i = 1; i <= N; i++) {
+        fac[i] = 1LL * fac[i - 1] * i % P;
+    }
+    invfac[N] = power(fac[N], P - 2);
+    for (int i = N; i > 0; i--) {
+        invfac[i - 1] = 1LL * invfac[i] * i % P;
+    }
+}
+
+using poly = Poly<P>;
+poly shift(const poly &f, int k) {
+    if (k < 0) k += P;
+    int n = f.size() - 1;
+    Poly a(n + 1);
+    for (int i = 0; i <= n; i++) {
+        a[i] = 1LL * f[n - i] * fac[n - i] % P;
+    }
+    Poly b(n + 1);
+    for (int i = 0; i <= n; i++) {
+        b[i] = 1LL * power(k, i) * invfac[i] % P;
+    }
+
+    a = a * b;
+
+    a.resize(n + 1);
+    reverse(a.a.begin(), a.a.end());
+    for (int i = 0; i <= n; i++) {
+        a[i] = 1LL * a[i] * invfac[i] % P;
+    }
+    return a;
+}
