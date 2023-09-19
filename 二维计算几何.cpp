@@ -47,7 +47,7 @@ double angle(const Point &a, const Point &b) {
 
 //a b平行四边形面积
 double area(const Point &a, const Point &b) {
-    return cross(a, b);
+    return fabs(cross(a, b));
 }
 
 //旋转agl弧度
