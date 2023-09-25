@@ -1,16 +1,17 @@
-struct seg {
+constexpr i64 limit = 0; //numeric_limits<i64>::min();
+struct Line {
     i64 k, b;
-    seg() {}
-    seg(i64 k, i64 b) : k(k), b(b) {}
+    Line() {}
+    Line(i64 k = 0, i64 b = 0) : k(k), b(b) {}
     i64 eval(int x) {
-        return (k * x + b);
+        return -(k * x + b);
     }
 };
 
 constexpr int N = 1E5;
 struct Node {
     int lc, rc;
-    seg dat;
+    Line dat;
     Node(i64 k = 0, i64 b = 0) : dat(k, b) {}
     i64 eval(i64 x) {
         return dat.eval(x);
@@ -18,36 +19,27 @@ struct Node {
 } tr[N * 60];
 int cnt, root;
 
-void modify(int &p, int sl, int sr, int l, int r, seg t) {
+void modify(int &p, int sl, int sr, Line t) {
     if (p == 0) p = ++cnt;
     int m = (sl + sr) / 2;
-    if (sl >= r || sr <= l) return;
-    if (l <= sl && sr <= r) {
-        if (tr[p].eval(sl) > t.eval(sl) && tr[p].eval(sr) > t.eval(sr)) return;
-        if (tr[p].eval(sl) < t.eval(sl) && tr[p].eval(sr) < t.eval(sr)) {
-            tr[p].dat = t;
-            return;
-        }
-
-        if (t.eval(m) > tr[p].eval(m)) {
-            swap(tr[p].dat, t);
-        }
-        if (t.eval(sl) > tr[p].eval(sl)) modify(tr[p].lc, sl, m, l, r, t);
-        if (t.eval(sr) > tr[p].eval(sr)) modify(tr[p].rc, m, sr, l, r, t);
+    bool fm = t.eval(m) > tr[p].eval(m);
+    bool fl = t.eval(sl) > tr[p].eval(sl);
+    bool fr = t.eval(sr) > tr[p].eval(sr);
+    if (fm) swap(t, tr[p].dat);
+    if (fr == fl || sl == sr - 1) {
         return;
+    } else if (fl != fm) {
+        modify(tr[p].lc, sl, m, t);
+    } else {
+        modify(tr[p].rc, m, sr, t);
     }
-    modify(tr[p].lc, sl, m, l, r, t);
-    modify(tr[p].rc, m, sr, l, r, t);
 }
 
-seg query(int p, int sl, int sr, int x) {
-    if (sl == sr - 1) {
-        return tr[p].dat;
-    }
+i64 query(int p, int sl, int sr, int x) {
+    if (p == 0) return limit;
     int m = (sl + sr) / 2;
-    seg t;
-    if (x < m) t = query(tr[p].lc, sl, m, x);
-    else t = query(tr[p].rc, m, sr, x);
-    if (tr[p].eval(x) > t.eval(x)) t = tr[p].dat;
-    return t;
+    i64 res = tr[p].eval(x);
+    if (x < m) res = max(res, query(tr[p].lc, sl, m, x));
+    else res = max(res, query(tr[p].rc, m, sr, x));
+    return res;
 }
