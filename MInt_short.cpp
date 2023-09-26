@@ -25,10 +25,10 @@ struct Z {
         return a.x * power(b, P - 2);
     }
     constexpr friend Z operator+ (Z a, Z b) {
-        return norm(a.x + b.x);
+        return a.x + b.x;
     }
     constexpr friend Z operator- (Z a, Z b) {
-        return norm(a.x - b.x);
+        return a.x - b.x;
     }
 };
 template<int V>
