@@ -103,7 +103,7 @@ struct Poly {
         return (int)a.size() - 1;
     }
 
-    constexpr Poly& resize(int k) {
+    constexpr Poly &resize(int k) {
         this->a.resize(k);
         return *this;
     }
@@ -118,7 +118,7 @@ struct Poly {
         return a.empty();
     }
 
-    int& operator[](int idx) {
+    int &operator[](int idx) {
         return a[idx];
     }
 
@@ -238,19 +238,19 @@ struct Poly {
         return a;
     }
 
-    Poly& operator/= (int k) {
+    Poly &operator/= (int k) {
         return (*this) = (*this) / k;
     }
-    Poly& operator*= (int k) {
+    Poly &operator*= (int k) {
         return (*this) = (*this) * k;
     }
-    Poly& operator*= (const Poly &b) {
+    Poly &operator*= (const Poly &b) {
         return (*this) = (*this) * b;
     }
-    Poly& operator+= (const Poly &b) {
+    Poly &operator+= (const Poly &b) {
         return (*this) = (*this) + b;
     }
-    Poly& operator-= (const Poly &b) {
+    Poly &operator-= (const Poly &b) {
         return (*this) = (*this) - b;
     }
 
@@ -403,3 +403,16 @@ poly Bell(int n) {
     }
     return res;
 }
+
+//fft
+// for (int k = 1; k < n; k *= 2) {
+//     Complex e = {cos(PI / k), sin(PI / k)};
+//     for (int i = 0; i < n; i += 2 * k) {
+//         Complex c{1, 0};
+//         for (int j = 0; j < k; j++, c = c * e) {
+//             Complex u = a[i + j], v = a[i + j + k] * c;
+//             a[i + j] = (u + v);
+//             a[i + j + k] = u - v;
+//         }
+//     }
+// }
