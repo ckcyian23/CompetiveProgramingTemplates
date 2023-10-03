@@ -24,6 +24,7 @@ struct Bits {
             ret.bits[i + div] = (lst | bits[i] << mod);
             if (mod) lst = (bits[i] >> (B - mod));
         }
+        ret._clean();
         return ret;
     }
     Bits operator>> (int k) const {
@@ -34,6 +35,7 @@ struct Bits {
             ret.bits[i - div] = (lst | bits[i] >> mod);
             if (mod) lst = (bits[i] << (B - mod));
         }
+        ret._clean();
         return ret;
     }
 
@@ -250,7 +252,7 @@ struct Bits {
     int count() const {
         int res = 0;
         for (int i = 0; i < n; i++) {
-            res += __builtin_popcount(bits[i]);
+            res += __builtin_popcountll(bits[i]);
         }
         return res;
     }
