@@ -1,63 +1,118 @@
-template<class Data, class Merge = std::plus<Data>>
-struct SegmentTree {
-    const int n;
-    const Merge merge;
-    vector<Data> a;
-
-    SegmentTree(int n) : n(n), a(n << 2), merge(Merge()) {}
-    SegmentTree(const vector<Data>& info) : SegmentTree(info.size()) {
-        build(info);
+template<class Info>
+struct LazySegmentTree {
+    int n;
+    std::vector<Info> info;
+    LazySegmentTree() : n(0) {}
+    LazySegmentTree(int n_, Info v_ = Info()) {
+        init(n_, v_);
     }
-    void build(const vector<Data>& info, int p, int sl, int sr) {
-        if (sr - sl == 1) {
-            a[p] = info[sl];
-            return;
-        }
-        int mid = sl + sr >> 1;
-        build(info, p << 1, sl, mid);
-        build(info, p << 1 | 1, mid, sr);
-        pull(p);
+    template<class T>
+    LazySegmentTree(std::vector<T> init_) {
+        init(init_);
     }
-    void build(const vector<Data>& info) {
-        build(info, 1, 0, n);
+    void init(int n_, Info v_ = Info()) {
+        init(std::vector(n_, v_));
+    }
+    template<class T>
+    void init(std::vector<T> init_) {
+        n = init_.size();
+        info.assign(4 << std::__lg(n), Info());
+        std::function<void(int, int, int)> build = [&](int p, int l, int r) {
+            if (r - l == 1) {
+                info[p] = init_[l];
+                return;
+            }
+            int m = (l + r) / 2;
+            build(2 * p, l, m);
+            build(2 * p + 1, m, r);
+            pull(p);
+        };
+        build(1, 0, n);
     }
     void pull(int p) {
-        a[p] = merge(a[p << 1], a[p << 1 | 1]);
+        info[p] = info[2 * p] + info[2 * p + 1];
     }
-    Data query(int l, int r, int p, int sl, int sr) {
-        if (l <= sl && sr <= r) {
-            return a[p];
-        }
-        int mid = sl + sr >> 1;
-        if(mid >= r) return query(l, r, p << 1, sl, mid);
-        if(mid <= l) return query(l, r, p << 1 | 1, mid, sr);
-        return merge(query(l, r, p << 1, sl, mid), query(l, r, p << 1 | 1, mid, sr));
-    }
-    Data query(int l, int r) {
-        return query(l, r, 1, 0, n);
-    }
-    void modify(int x, const Data& v, int p, int sl, int sr) {
-        if (sr - sl == 1) {
-            a[p] = v;
+    void modify(int p, int l, int r, int x, const Info &v) {
+        if (r - l == 1) {
+            info[p] = v;
             return;
         }
-        int mid = sl + sr >> 1;
-        if (x < mid) modify(x, v, p << 1, sl, mid);
-        else modify(x, v, p << 1 | 1, mid, sr);
+        int m = (l + r) / 2;
+        if (x < m) {
+            modify(2 * p, l, m, x, v);
+        } else {
+            modify(2 * p + 1, m, r, x, v);
+        }
         pull(p);
     }
-    void modify(int s, const Data& v) {
-        modify(s, v, 1, 0, n);
+    void modify(int p, const Info &v) {
+        modify(1, 0, n, p, v);
+    }
+    Info rangeQuery(int p, int l, int r, int x, int y) {
+        if (l >= y || r <= x) {
+            return Info();
+        }
+        if (l >= x && r <= y) {
+            return info[p];
+        }
+        int m = (l + r) / 2;
+        return rangeQuery(2 * p, l, m, x, y) + rangeQuery(2 * p + 1, m, r, x, y);
+    }
+    Info rangeQuery(int l, int r) {
+        return rangeQuery(1, 0, n, l, r);
     }
 
-
+    template<class F>
+    int findFirst(int p, int l, int r, int x, int y, F pred) {
+        if (l >= y || r <= x || !pred(info[p])) {
+            return -1;
+        }
+        if (r - l == 1) {
+            return l;
+        }
+        int m = (l + r) / 2;
+        int res = findFirst(2 * p, l, m, x, y, pred);
+        if (res == -1) {
+            res = findFirst(2 * p + 1, m, r, x, y, pred);
+        }
+        return res;
+    }
+    template<class F>
+    int findFirst(int l, int r, F pred) {
+        return findFirst(1, 0, n, l, r, pred);
+    }
+    template<class F>
+    int findLast(int p, int l, int r, int x, int y, F pred) {
+        if (l >= y || r <= x || !pred(info[p])) {
+            return -1;
+        }
+        if (r - l == 1) {
+            return l;
+        }
+        int m = (l + r) / 2;
+        int res = findLast(2 * p + 1, m, r, x, y, pred);
+        if (res == -1) {
+            res = findLast(2 * p, l, m, x, y, pred);
+        }
+        return res;
+    }
+    template<class F>
+    int findLast(int l, int r, F pred) {
+        return findLast(1, 0, n, l, r, pred);
+    }
 };
+ 
 
+constexpr int inf = 1E9;
 struct Info {
-    int x;
-    Info(int x = 0) : x(x) {}
+    int max, min;
+    Info(int val) : max(val), min(val) {}
+    Info() : max(-inf), min(inf) {}
 };
 
-Info operator+(const Info& a, const Info& b) {
-    return std::max(a.x, b.x);
+Info operator+(Info a, Info b) {
+    Info c;
+    c.max = max(a.max, b.max);
+    c.min = min(a.min, b.min);
+    return c;
 }
