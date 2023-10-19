@@ -1,13 +1,13 @@
 template<class Info>
-struct LazySegmentTree {
+struct SegmentTree {
     int n;
     std::vector<Info> info;
-    LazySegmentTree() : n(0) {}
-    LazySegmentTree(int n_, Info v_ = Info()) {
+    SegmentTree() : n(0) {}
+    SegmentTree(int n_, Info v_ = Info()) {
         init(n_, v_);
     }
     template<class T>
-    LazySegmentTree(std::vector<T> init_) {
+    SegmentTree(std::vector<T> init_) {
         init(init_);
     }
     void init(int n_, Info v_ = Info()) {
