@@ -134,7 +134,7 @@ struct FenwickM {
             //                        Max:<第一个大于等于，<=第一个大于
                 x += i;
         }
-        return x;
+        return x; 
     }
 
 };
