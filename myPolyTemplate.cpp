@@ -404,6 +404,10 @@ poly Bell(int n) {
     return res;
 }
 
+//mtt
+// i64 x = 1LL * mod(a2[i] - a1[i], P2) * CInv<P1, P2> % P2 * P1 + a1[i];
+// i64 ans = ((1LL * (a3[i] - x) % P3 + P3) % P3 * CInv<1LL * P1 * P2 % P3, P3> % P3 * (1LL * P1 * P2 % P) % P + x) % P;
+
 //fft
 // for (int k = 1; k < n; k *= 2) {
 //     Complex e = {cos(PI / k), sin(PI / k)};
